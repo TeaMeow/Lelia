@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Lelia - Cropbox</title>
+<script src="../src/lelia.js"></script>
+<style>
+.crops.container > img
+{
+    margin-right: 10px;
+}
+.image.box
+{
+    position: relative;
+    height: 400px;
+    width: 400px;
+    border:1px solid #aaa;
+    background: #fff;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    cursor:move;
+}
+
+.image.box .thumb.box
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    margin-top: -100px;
+    margin-left: -100px;
+    box-sizing: border-box;
+    border: 1px solid rgb(102, 102, 102);
+    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+    background: none repeat scroll 0% 0% transparent;
+}
+
+.image.box .loader
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    line-height: 400px;
+    background: rgba(0,0,0,0.7);
+}
+    </style>
+</head>
+<body>
+
+    <!-- 主體 -->
+    <div class="image box">
+        
+        <!-- 裁切容器 -->
+        <div class="thumb box"></div>
+        <!-- / 裁切容器 -->
+        
+        
+        <!-- 讀取指示器 -->
+        <div class="loader">
+            讀取中。
+        </div>
+        <!-- / 讀取指示器 -->
+        
+    </div>
+    <!-- / 主體 -->
+        
+
+    <!-- 檔案 -->
+    <input type="file">
+    <!-- /檔案 -->
+    
+    
+    <!-- 縮放控制 -->
+    <button class="zoom out">縮小 -</button>
+    <button class="zoom in">放大 +</button>
+    <input type="range" min="0.1" max="2" step="0.01">
+    <!-- / 縮放控制 -->
+    
+    
+    <!-- 裁切控制 -->
+    <button class="crop">剪裁</button>
+    <!-- / 裁切控制 -->
+    
+    <br>
+    
+    <!-- 已裁切和預覽容器 -->
+    <img class="preview">
+     
+    <div class="crops container"></div>
+    <!-- / 已裁切和預覽容器 -->
+    
+    
+    <script>
+    window.onload = function()
+    {
+        var cropper,
+            reader  = new FileReader(),
+            options = 
+            {
+                imageBox  : '.image.box',
+                thumbBox  : '.thumb.box',
+                loader    : '.loader',
+                imgSrc    : 'avatar.png',
+                slider    : 'input[type="range"]',
+                maxSize   : 512,
+                preview   : '.preview'
+            };
+    
+    
+        document.querySelector('input[type="file"]').addEventListener('change', function()
+        {
+            reader.onload = function(e)
+            {
+                options.imgSrc = e.target.result;
+                cropper        = new cropbox(options);
+                
+                document.querySelector('.zoom.in').addEventListener('click', function(){cropper.zoomIn()});
+                document.querySelector('.zoom.out').addEventListener('click', function(){cropper.zoomOut()});
+            }
+            
+            reader.readAsDataURL(this.files[0]);
+        })
+        
+        document.querySelector('.crop').addEventListener('click', function()
+        {
+            document.querySelector('.crops.container').innerHTML += '<img src="' + cropper.getBlob() + '">';
+        })
+
+        
+    };
+    </script>
+    
+    
+</body>
+</html>

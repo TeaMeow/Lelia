@@ -92,6 +92,7 @@
         {
             imageBox: '.imageBox',
             thumbBox: '.thumbBox',
+            previewEco: true,
             loader : '.spinner',
             imgSrc  : 'avatar.png',
             slider  : '#slider1',
@@ -117,7 +118,7 @@
     
         })
         document.querySelector('#btnCrop').addEventListener('click', function(){
-            var img = cropper.getDataURI()
+            var img = cropper.getBlob()
             document.querySelector('.cropped').innerHTML += '<img src="'+img+'">';
         })
         document.querySelector('#btnZoomIn').addEventListener('click', function(){

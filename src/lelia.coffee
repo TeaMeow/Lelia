@@ -25,13 +25,14 @@ cropbox = (options) ->
     state     : {}
     ratio     : 1
     options   : options
+    previewEco: options.previewEco ? false
     imageBox  : el
     thumbBox  : el.querySelector(options.thumbBox)
     loader    : el.querySelector(options.loader)
     maxSize   : options.maxSize ? 512
-    onMove    : options.onMove  ? ->
-    onDown    : options.onDown  ? ->
-    onUp      : options.onUp    ? ->
+    onMove    : options.onMove  ? null
+    onDown    : options.onDown  ? null
+    onUp      : options.onUp    ? null
     image     : new Image()
     
   
@@ -63,15 +64,6 @@ cropbox = (options) ->
     
     getBlob: () ->
       return URL.createObjectURL(dataURItoBlob(@getDataURI()))
-      
-      #b64       = @getDataURI().replace 'data:image/png;base64,', ''
-      #binary    = atob(b64)
-      #array     = []
-      #
-      #for el, i in binary.length
-      #  array.push binary.charCodeAt i
-      #  
-      #return new Blob([new Uint8Array(array)], {type: 'image/png'})
     
     
     
@@ -166,7 +158,9 @@ cropbox = (options) ->
   
   start = (e) ->
     e.preventDefault()
-    obj.onUp.call(@, e)
+    
+    if obj.onUp isnt null
+      obj.onUp.call(@, e)
     
     obj.state.dragable = true
     obj.state.posX     = client('X', e)
@@ -203,12 +197,15 @@ cropbox = (options) ->
   
   move = (e) ->
     e.preventDefault()
-    obj.onMove.call(@, e)
     
-    preivew.src = obj.getDataURI()
-    
+    if obj.onMove isnt null
+      obj.onMove.call(@, e)
+
     if not obj.state.dragable
       return
+
+    if not obj.previewEco and preivew isnt null
+      preivew.src = obj.getDataURI()
       
     x   = client('X', e) - obj.state.posX
     y   = client('Y', e) - obj.state.posY
@@ -230,7 +227,12 @@ cropbox = (options) ->
 
   end = (e) ->
     e.preventDefault()
-    obj.onUp.call(@, e)
+    
+    if obj.previewEco and preivew isnt null
+      preivew.src = obj.getDataURI()
+    
+    if obj.onUp isnt null
+      obj.onUp.call(@, e)
     
     obj.state.dragable = false
 
@@ -249,12 +251,19 @@ cropbox = (options) ->
   
   resize = ->
     canvas        = document.createElement("canvas")
-    canvas.width  = options.maxSize
-    canvas.height = options.maxSize
+    tempImg       = new Image()
+    tempImg.src   = options.imgSrc
+    aspectRatio   = tempImg.width / tempImg.height
+    # Clean
+    tempImg       = null
+    width         = obj.maxSize
+    height        = width / aspectRatio
+    canvas.width  = width
+    canvas.height = height
     c2d           = canvas.getContext("2d")
     img           = new Image()
     img.onload    = (e) ->
-      c2d.drawImage(@, 0, 0, options.maxSize, options.maxSize)
+      c2d.drawImage(@, 0, 0, width, height)
       
       # Set the main image
       obj.image.src = URL.createObjectURL(dataURItoBlob(canvas.toDataURL("image/png")))

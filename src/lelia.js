@@ -20,7 +20,7 @@ Yb,_,d88b,,_    `YbadP' ,d8b,_ _,88,_,d8,   ,d8b,
 var cropbox;
 
 cropbox = function(options) {
-  var bindEvent, client, dataURItoBlob, el, end, move, obj, preivew, ref, ref1, ref2, ref3, resize, setBackground, slider, sliderr, start;
+  var bindEvent, client, dataURItoBlob, el, end, move, obj, preivew, ref, ref1, ref2, ref3, ref4, resize, setBackground, slider, sliderr, start;
   el = document.querySelector(options.imageBox);
   slider = document.querySelector(options.slider);
   preivew = document.querySelector(options.preview);
@@ -28,13 +28,14 @@ cropbox = function(options) {
     state: {},
     ratio: 1,
     options: options,
+    previewEco: (ref = options.previewEco) != null ? ref : false,
     imageBox: el,
     thumbBox: el.querySelector(options.thumbBox),
     loader: el.querySelector(options.loader),
-    maxSize: (ref = options.maxSize) != null ? ref : 512,
-    onMove: (ref1 = options.onMove) != null ? ref1 : function() {},
-    onDown: (ref2 = options.onDown) != null ? ref2 : function() {},
-    onUp: (ref3 = options.onUp) != null ? ref3 : function() {},
+    maxSize: (ref1 = options.maxSize) != null ? ref1 : 512,
+    onMove: (ref2 = options.onMove) != null ? ref2 : null,
+    onDown: (ref3 = options.onDown) != null ? ref3 : null,
+    onUp: (ref4 = options.onUp) != null ? ref4 : null,
     image: new Image(),
 
     /*
@@ -132,7 +133,9 @@ cropbox = function(options) {
    */
   start = function(e) {
     e.preventDefault();
-    obj.onUp.call(this, e);
+    if (obj.onUp !== null) {
+      obj.onUp.call(this, e);
+    }
     obj.state.dragable = true;
     obj.state.posX = client('X', e);
     return obj.state.posY = client('Y', e);
@@ -167,10 +170,14 @@ cropbox = function(options) {
   move = function(e) {
     var bg, bgX, bgY, x, y;
     e.preventDefault();
-    obj.onMove.call(this, e);
-    preivew.src = obj.getDataURI();
+    if (obj.onMove !== null) {
+      obj.onMove.call(this, e);
+    }
     if (!obj.state.dragable) {
       return;
+    }
+    if (!obj.previewEco && preivew !== null) {
+      preivew.src = obj.getDataURI();
     }
     x = client('X', e) - obj.state.posX;
     y = client('Y', e) - obj.state.posY;
@@ -189,7 +196,12 @@ cropbox = function(options) {
    */
   end = function(e) {
     e.preventDefault();
-    obj.onUp.call(this, e);
+    if (obj.previewEco && preivew !== null) {
+      preivew.src = obj.getDataURI();
+    }
+    if (obj.onUp !== null) {
+      obj.onUp.call(this, e);
+    }
     return obj.state.dragable = false;
   };
   sliderr = function(e) {
@@ -203,14 +215,20 @@ cropbox = function(options) {
   Resize the image by canvas, to reduce some laggy craps.
    */
   resize = function() {
-    var c2d, canvas, img;
+    var aspectRatio, c2d, canvas, height, img, tempImg, width;
     canvas = document.createElement("canvas");
-    canvas.width = options.maxSize;
-    canvas.height = options.maxSize;
+    tempImg = new Image();
+    tempImg.src = options.imgSrc;
+    aspectRatio = tempImg.width / tempImg.height;
+    tempImg = null;
+    width = obj.maxSize;
+    height = width / aspectRatio;
+    canvas.width = width;
+    canvas.height = height;
     c2d = canvas.getContext("2d");
     img = new Image();
     img.onload = function(e) {
-      c2d.drawImage(this, 0, 0, options.maxSize, options.maxSize);
+      c2d.drawImage(this, 0, 0, width, height);
       return obj.image.src = URL.createObjectURL(dataURItoBlob(canvas.toDataURL("image/png")));
     };
     return img.src = options.imgSrc;

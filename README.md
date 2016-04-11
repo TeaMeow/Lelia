@@ -35,19 +35,20 @@
 ```javascript
 var options = 
 {
-    preview : '.previewImg', //用以預覽目前裁切範圍的圖片。
-    slider  : '.slider'    , //用以控制縮放的滑桿（range）元素。
-    imageBox: '.imageBox'  , //剪裁的主要容器。
-    thumbBox: '.thumbBox'  , //剪裁範圍的容器。
-    loader  : '.loader'    , //讀取時會出現的元素，讀取完後隱藏。
-    imgSrc  : 'test.png'   , //圖片網址，可以是 Base64 或 Blob。
-    maxSize : 512          , //圖片最大尺寸，透過此設定避免行動裝置卡頓。
+    preview   : '.previewImg', //（可能導致 Lag）用以預覽目前裁切範圍的圖片。
+    previewEco: false        , //預覽節約模式，只在放開時更換預覽圖片，避免卡頓。
+    slider    : '.slider'    , //用以控制縮放的滑桿（range）元素。
+    imageBox  : '.imageBox'  , //剪裁的主要容器。
+    thumbBox  : '.thumbBox'  , //剪裁範圍的容器。
+    loader    : '.loader'    , //讀取時會出現的元素，讀取完後隱藏。
+    imgSrc    : 'test.png'   , //圖片網址，可以是 Base64 或 Blob。
+    maxSize   : 512          , //圖片最大尺寸，透過此設定避免行動裝置卡頓。
     
     /** 回傳 */
-    onMove  : function()   , //移動裁切圖片時的回傳函式。
-    onDown  : function()   , //正要裁切圖片時的回傳函式。
-    onUp    : function()   , //結束移動動作時的回傳函式。
-    onCrop  : function()   , //（目前不可用）裁切時的回傳函式。
+    onMove    : function()   , //移動裁切圖片時的回傳函式。
+    onDown    : function()   , //正要裁切圖片時的回傳函式。
+    onUp      : function()   , //結束移動動作時的回傳函式。
+    onCrop    : function()   , //（目前不可用）裁切時的回傳函式。
 }
 ```
 
