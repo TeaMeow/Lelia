@@ -33,7 +33,7 @@
 你需要先配置設定。
 
 ```javascript
-var options = 
+var options =
 {
     preview   : '.previewImg', //（可能導致 Lag）用以預覽目前裁切範圍的圖片。
     previewEco: false        , //預覽節約模式，只在放開時更換預覽圖片，避免卡頓。
@@ -43,7 +43,9 @@ var options =
     loader    : '.loader'    , //讀取時會出現的元素，讀取完後隱藏。
     imgSrc    : 'test.png'   , //圖片網址，可以是 Base64 或 Blob。
     maxSize   : 512          , //圖片最大尺寸，透過此設定避免行動裝置卡頓。
-    
+    boxSize   : '100%'       , //整體的大小。
+    cropSize  : 200          , //裁切框的大小。
+
     /** 回傳 */
     onMove    : function()   , //移動裁切圖片時的回傳函式。
     onDown    : function()   , //正要裁切圖片時的回傳函式。
@@ -63,14 +65,14 @@ var options =
     <!-- 裁切容器 -->
     <div class="thumbBox"></div>
     <!-- / 裁切容器 -->
-    
-    
+
+
     <!-- 讀取指示器 -->
     <div class="loader">
         圖片讀取中。
     </div>
     <!-- / 讀取指示器 -->
-    
+
 </div>
 <!-- / 主要容器 -->
 ```
@@ -101,9 +103,9 @@ var options =
     height: height
     dim   : dim
     size  : size
-    ratio : parseFloat(this.ratio)
-    dx    : parseInt(dim[0]) - el.clientWidth  / 2 + width  / 2
-    dy    : parseInt(dim[1]) - el.clientHeight / 2 + height / 2
+    ratio : // 縮放的倍數
+    dx    : // 開始裁切的X（不含倍數）
+    dy    : // 開始裁切的Y（不含倍數）
     dw    : parseInt(size[0])
     dh    : parseInt(size[1])
     sh    : parseInt(this.image.height)
