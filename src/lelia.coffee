@@ -29,10 +29,12 @@ cropbox = (options) ->
     imageBox  : el
     thumbBox  : el.querySelector(options.thumbBox)
     loader    : el.querySelector(options.loader)
-    maxSize   : options.maxSize ? 512
-    onMove    : options.onMove  ? null
-    onDown    : options.onDown  ? null
-    onUp      : options.onUp    ? null
+    maxSize   : options.maxSize  ? 512
+    onMove    : options.onMove   ? null
+    onDown    : options.onDown   ? null
+    onUp      : options.onUp     ? null
+    boxSize   : options.boxSize  ? 400
+    cropSize  : options.cropSize ? 200
     image     : new Image()
     
   
@@ -143,10 +145,10 @@ cropbox = (options) ->
     pw = (el.clientWidth - w)  / 2
     ph = (el.clientHeight - h) / 2
     
-    el.setAttribute('style', 
-              'background-image: url(' + obj.image.src + '); ' + 'background-size: ' + w + 'px ' + h + 'px; ' +
-              'background-position: ' + pw + 'px ' + ph + 'px; ' +
-              'background-repeat: no-repeat')
+    el.style.backgroundRepeat   = 'no-repeat'
+    el.style.backgroundImage    = 'url(' + obj.image.src + ')'
+    el.style.backgroundSize     = w + 'px ' + h + 'px'
+    el.style.backgroundPosition = pw + 'px ' + ph + 'px'
   
   
   
@@ -270,6 +272,14 @@ cropbox = (options) ->
 
     # Set the image src so we can start the image load event
     img.src = options.imgSrc
+    
+    obj.imageBox.style.height = obj.boxSize + 'px'
+    obj.imageBox.style.width  = obj.boxSize + 'px'
+    obj.thumbBox.style.height = obj.cropSize + 'px'
+    obj.thumbBox.style.width  = obj.cropSize + 'px'
+    
+    obj.thumbBox.style.marginTop   = '-' + obj.cropSize / 2 + 'px'
+    obj.thumbBox.style.marginLeft  = '-' + obj.cropSize / 2 + 'px'
   
   
   

@@ -4,51 +4,14 @@
 <meta charset="utf-8">
 <title>Lelia - Cropbox</title>
 <script src="../src/lelia.js"></script>
+<link rel="stylesheet" href="../dist/lelia.css" type="text/css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.css" type="text/css">
 <style>
 .crops.container > img
 {
     margin-right: 10px;
 }
-.image.box
-{
-    position: relative;
-    height: 400px;
-    width: 400px;
-    border:1px solid #aaa;
-    background: #fff;
-    overflow: hidden;
-    background-repeat: no-repeat;
-    cursor:move;
-}
-
-.image.box .thumb.box
-{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 200px;
-    height: 200px;
-    margin-top: -100px;
-    margin-left: -100px;
-    box-sizing: border-box;
-    border: 1px solid rgb(102, 102, 102);
-    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
-    background: none repeat scroll 0% 0% transparent;
-}
-
-.image.box .loader
-{
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    text-align: center;
-    line-height: 400px;
-    background: rgba(0,0,0,0.7);
-}
-    </style>
+</style>
 </head>
 <body>
 
@@ -60,11 +23,11 @@
         <!-- / 裁切容器 -->
         
         
-        <!-- 讀取指示器 -->
+        <!-- 讀取指示器 
         <div class="loader">
             讀取中。
         </div>
-        <!-- / 讀取指示器 -->
+         / 讀取指示器 -->
         
     </div>
     <!-- / 主體 -->
@@ -113,8 +76,10 @@
                 loader    : '.loader',
                 imgSrc    : 'avatar.png',
                 slider    : 'input[type="range"]',
-                maxSize   : 512,
-                preview   : '.preview'
+                maxSize   : 400,
+                preview   : '.preview',
+                boxSize   : 300,
+                cropSize  : 200
             };
     
     

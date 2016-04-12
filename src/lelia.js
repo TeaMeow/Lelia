@@ -20,7 +20,7 @@ Yb,_,d88b,,_    `YbadP' ,d8b,_ _,88,_,d8,   ,d8b,
 var cropbox;
 
 cropbox = function(options) {
-  var bindEvent, client, dataURItoBlob, el, end, move, obj, preivew, ref, ref1, ref2, ref3, ref4, resize, setBackground, slider, sliderr, start;
+  var bindEvent, client, dataURItoBlob, el, end, move, obj, preivew, ref, ref1, ref2, ref3, ref4, ref5, ref6, resize, setBackground, slider, sliderr, start;
   el = document.querySelector(options.imageBox);
   slider = document.querySelector(options.slider);
   preivew = document.querySelector(options.preview);
@@ -36,6 +36,8 @@ cropbox = function(options) {
     onMove: (ref2 = options.onMove) != null ? ref2 : null,
     onDown: (ref3 = options.onDown) != null ? ref3 : null,
     onUp: (ref4 = options.onUp) != null ? ref4 : null,
+    boxSize: (ref5 = options.boxSize) != null ? ref5 : 400,
+    cropSize: (ref6 = options.cropSize) != null ? ref6 : 200,
     image: new Image(),
 
     /*
@@ -123,7 +125,10 @@ cropbox = function(options) {
     h = parseInt(obj.image.height) * obj.ratio;
     pw = (el.clientWidth - w) / 2;
     ph = (el.clientHeight - h) / 2;
-    return el.setAttribute('style', 'background-image: url(' + obj.image.src + '); ' + 'background-size: ' + w + 'px ' + h + 'px; ' + 'background-position: ' + pw + 'px ' + ph + 'px; ' + 'background-repeat: no-repeat');
+    el.style.backgroundRepeat = 'no-repeat';
+    el.style.backgroundImage = 'url(' + obj.image.src + ')';
+    el.style.backgroundSize = w + 'px ' + h + 'px';
+    return el.style.backgroundPosition = pw + 'px ' + ph + 'px';
   };
 
   /*
@@ -231,7 +236,13 @@ cropbox = function(options) {
       c2d.drawImage(this, 0, 0, width, height);
       return obj.image.src = URL.createObjectURL(dataURItoBlob(canvas.toDataURL("image/png")));
     };
-    return img.src = options.imgSrc;
+    img.src = options.imgSrc;
+    obj.imageBox.style.height = obj.boxSize + 'px';
+    obj.imageBox.style.width = obj.boxSize + 'px';
+    obj.thumbBox.style.height = obj.cropSize + 'px';
+    obj.thumbBox.style.width = obj.cropSize + 'px';
+    obj.thumbBox.style.marginTop = '-' + obj.cropSize / 2 + 'px';
+    return obj.thumbBox.style.marginLeft = '-' + obj.cropSize / 2 + 'px';
   };
 
   /*
